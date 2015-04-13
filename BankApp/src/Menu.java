@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 public class Menu {
 
     //Instance Variables
-    Scanner keyboard = new Scanner(System.in);
     Bank bank = new Bank();
     boolean exit;
 
@@ -22,7 +21,7 @@ public class Menu {
         printHeader();
         while (!exit) {
             printMenu();
-            int choice = getInput();
+            int choice = getMenuChoice();
             performAction(choice);
         }
     }
@@ -35,7 +34,7 @@ public class Menu {
     }
 
     private void printMenu() {
-        System.out.println("Please make a selection: ");
+        displayHeader("Please make a selection");
         System.out.println("1) Create a new Account");
         System.out.println("2) Make a deposit");
         System.out.println("3) Make a withdrawal");
@@ -43,7 +42,8 @@ public class Menu {
         System.out.println("0) Exit");
     }
 
-    private int getInput() {
+    private int getMenuChoice() {
+        Scanner keyboard = new Scanner(System.in);
         int choice = -1;
         do {
             System.out.print("Enter your choice: ");
@@ -89,7 +89,7 @@ public class Menu {
 
     private String askQuestion(String question, List<String> answers) {
         String response = "";
-        Scanner input = new Scanner(System.in);
+        Scanner keyboard = new Scanner(System.in);
         boolean choices = ((answers == null) || answers.size() == 0) ? false : true;
         boolean firstRun = true;
         do {
@@ -105,7 +105,7 @@ public class Menu {
                 System.out.print(answers.get(answers.size() - 1));
                 System.out.print("): ");
             }
-            response = input.nextLine();
+            response = keyboard.nextLine();
             firstRun = false;
             if (!choices) {
                 break;
@@ -115,6 +115,7 @@ public class Menu {
     }
 
     private double getDeposit(String accountType) {
+        Scanner keyboard = new Scanner(System.in);
         double initialDeposit = 0;
         Boolean valid = false;
         while (!valid) {
@@ -142,6 +143,7 @@ public class Menu {
     }
 
     private void createAnAccount() throws InvalidAccountTypeException {
+        displayHeader("Create an Account");
         //Get account information
         String accountType = askQuestion("Please enter an account type: ", Arrays.asList("checking", "savings"));
         String firstName = askQuestion("Please enter your first name: ", null);
@@ -161,7 +163,8 @@ public class Menu {
         bank.addCustomer(customer);
     }
 
-    private double getAmount(String question) {
+    private double getDollarAmount(String question) {
+        Scanner keyboard = new Scanner(System.in);
         System.out.print(question);
         double amount = 0;
         try {
@@ -173,29 +176,48 @@ public class Menu {
     }
 
     private void makeADeposit() {
+        displayHeader("Make a Deposit");
         int account = selectAccount();
         if (account >= 0) {
-            double amount = getAmount("How much would you like to deposit?: ");
+            double amount = getDollarAmount("How much would you like to deposit?: ");
             bank.getCustomer(account).getAccount().deposit(amount);
         }
     }
 
     private void makeAWithdrawal() {
+        displayHeader("Make a Withdrawal");
         int account = selectAccount();
         if (account >= 0) {
-            double amount = getAmount("How much would you like to withdraw?: ");
+            double amount = getDollarAmount("How much would you like to withdraw?: ");
             bank.getCustomer(account).getAccount().withdraw(amount);
         }
     }
 
     private void listBalances() {
+        displayHeader("List Account Details");
         int account = selectAccount();
         if (account >= 0) {
+            displayHeader("Account Details");
             System.out.println(bank.getCustomer(account).getAccount());
         }
     }
+    
+    private void displayHeader(String message){
+        System.out.println();
+        int width = message.length() + 6;
+        StringBuilder sb = new StringBuilder();
+        sb.append("+");
+        for(int i = 0; i < width; ++i){
+            sb.append("-");
+        }
+        sb.append("+");
+        System.out.println(sb.toString());
+        System.out.println("|   " + message + "   |");
+        System.out.println(sb.toString());
+    }
 
     private int selectAccount() {
+        Scanner keyboard = new Scanner(System.in);
         ArrayList<Customer> customers = bank.getCustomers();
         if (customers.size() <= 0) {
             System.out.println("No customers at your bank.");
@@ -203,7 +225,7 @@ public class Menu {
         }
         System.out.println("Select an account:");
         for (int i = 0; i < customers.size(); i++) {
-            System.out.println((i + 1) + ") " + customers.get(i).basicInfo());
+            System.out.println("\t" + (i + 1) + ") " + customers.get(i).basicInfo());
         }
         int account;
         System.out.print("Please enter your selection: ");

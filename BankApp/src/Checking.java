@@ -3,7 +3,6 @@ public class Checking extends Account{
     private static String accountType = "Checking";
     
     Checking(double initialDeposit){
-        super();
         this.setBalance(initialDeposit);
         this.checkInterest(0);
     }

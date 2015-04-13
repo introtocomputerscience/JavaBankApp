@@ -3,7 +3,6 @@ public class Savings extends Account{
     private static String accountType = "Savings";
     
     Savings(double initialDeposit){
-        super();
         this.setBalance(initialDeposit);
         this.checkInterest(0);
     }
