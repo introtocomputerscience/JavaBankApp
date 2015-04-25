@@ -125,6 +125,7 @@
         <Component class="javax.swing.JButton" name="removeAccountButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Remove Account"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeAccountButtonActionPerformed"/>
@@ -133,12 +134,20 @@
         <Component class="javax.swing.JButton" name="depositButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Deposit"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="depositButtonActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="withdrawButton">
           <Properties>
             <Property name="text" type="java.lang.String" value="Withdrawal"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="withdrawButtonActionPerformed"/>
+          </Events>
         </Component>
         <Container class="javax.swing.JScrollPane" name="jScrollPane1">
           <AuxValues>
@@ -155,7 +164,7 @@
                     <Column editable="false" title="First Name" type="java.lang.String"/>
                     <Column editable="false" title="Last Name" type="java.lang.String"/>
                     <Column editable="false" title="Account Number" type="java.lang.Integer"/>
-                    <Column editable="false" title="Balance" type="java.lang.Double"/>
+                    <Column editable="false" title="Balance" type="java.lang.String"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -189,6 +198,9 @@
                   <TableHeader reorderingAllowed="false" resizingAllowed="true"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="accountTableMouseClicked"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

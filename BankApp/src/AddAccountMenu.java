@@ -125,7 +125,7 @@ public class AddAccountMenu extends javax.swing.JDialog {
             warnings.append("Initial deposit must be entered.");
         } else {
             try {
-                amount = round(Double.parseDouble(depositField.getText()), 2);
+                amount = Bank.round(Double.parseDouble(depositField.getText()), 2);
             } catch (NumberFormatException ex) {
                 warnings.append("Initial deposit must be a number.");
             }
@@ -157,14 +157,7 @@ public class AddAccountMenu extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_okButtonActionPerformed
 
-    private static double round(double value, int places) {
-        if (places < 0) {
-            throw new IllegalArgumentException();
-        }
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.FLOOR);
-        return bd.doubleValue();
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;

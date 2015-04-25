@@ -1,9 +1,10 @@
 
-public class Account {
+public abstract class Account {
     private double balance = 0;
     private double interest = 0.02;
     private int accountNumber;
     private static int numberOfAccounts = 1000000;
+    private double transactionFee;
     
     Account(){
         accountNumber = numberOfAccounts++;
@@ -26,7 +27,7 @@ public class Account {
      * @return the interest
      */
     public double getInterest() {
-        return interest * 100;
+        return interest;
     }
 
     /**
@@ -43,27 +44,21 @@ public class Account {
         return accountNumber;
     }
     
-    public void withdraw(double amount){
-        if(amount + 5 > balance){
-            System.out.println("You have insufficient funds.");
-            return;
+    public void withdraw(double amount) throws InsufficientFundsException{
+        if(amount + transactionFee > balance){
+            throw new InsufficientFundsException();
         }
-        balance -= amount + 5;
+        balance -= amount + transactionFee;
         checkInterest(0);
-        System.out.println("You have withdrawn $" + amount + " dollars and incurred a fee of $5");
-        System.out.println("You now have a balance of $" + balance);
     }
     
-    public void deposit(double amount){
+    public void deposit(double amount) throws InvalidAmountException{
         if(amount <= 0){
-            System.out.println("You cannot deposit negative money.");
-            return;
+            throw new InvalidAmountException();
         }
         checkInterest(amount);
         amount = amount + amount * interest;
         balance += amount;
-        System.out.println("You have deposited $" + amount + " dollars with an interest rate of " + (interest*100) + "%");
-        System.out.println("You now have a balance of $" + balance);
     }
     
     public void checkInterest(double amount){
@@ -72,6 +67,14 @@ public class Account {
         } else {
             interest = 0.02;
         }
+    }
+
+    public double getTransactionFee() {
+        return transactionFee;
+    }
+    
+    public void setTransactionFee(double fee){
+        this.transactionFee = fee;
     }
 
 }

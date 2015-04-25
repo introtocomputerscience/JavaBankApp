@@ -56,6 +56,7 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         removeAccountButton.setText("Remove Account");
+        removeAccountButton.setEnabled(false);
         removeAccountButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeAccountButtonActionPerformed(evt);
@@ -63,8 +64,20 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         depositButton.setText("Deposit");
+        depositButton.setEnabled(false);
+        depositButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                depositButtonActionPerformed(evt);
+            }
+        });
 
         withdrawButton.setText("Withdrawal");
+        withdrawButton.setEnabled(false);
+        withdrawButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                withdrawButtonActionPerformed(evt);
+            }
+        });
 
         accountTable.setAutoCreateRowSorter(true);
         accountTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -76,7 +89,7 @@ public class MainMenu extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
@@ -92,6 +105,11 @@ public class MainMenu extends javax.swing.JFrame {
         });
         accountTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         accountTable.getTableHeader().setReorderingAllowed(false);
+        accountTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                accountTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(accountTable);
         if (accountTable.getColumnModel().getColumnCount() > 0) {
             accountTable.getColumnModel().getColumn(0).setResizable(false);
@@ -187,10 +205,36 @@ public class MainMenu extends javax.swing.JFrame {
         int selectedRow = accountTable.getSelectedRow();
         if (selectedRow >= 0) {
             Customer customer = getSelectedCustomer(selectedRow);
-            bank.removeCustomer(customer);
-            removeCustomerFromTable(selectedRow);
+            if (customer != null) {
+                bank.removeCustomer(customer);
+                removeCustomerFromTable(selectedRow);
+            }
         }
     }//GEN-LAST:event_removeAccountButtonActionPerformed
+
+    private void depositButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_depositButtonActionPerformed
+        int selectedRow = accountTable.getSelectedRow();
+        Customer customer = getSelectedCustomer(selectedRow);
+        if (customer != null) {
+            DepositMenu menu = new DepositMenu(this, true, customer);
+            menu.setVisible(true);
+            reloadCustomerRowData(selectedRow, customer);
+        }
+    }//GEN-LAST:event_depositButtonActionPerformed
+
+    private void withdrawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_withdrawButtonActionPerformed
+        int selectedRow = accountTable.getSelectedRow();
+        Customer customer = getSelectedCustomer(selectedRow);
+        if (customer != null) {
+            WithdrawalMenu menu = new WithdrawalMenu(this, true, customer);
+            menu.setVisible(true);
+            reloadCustomerRowData(selectedRow, customer);
+        }
+    }//GEN-LAST:event_withdrawButtonActionPerformed
+
+    private void accountTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountTableMouseClicked
+        setAccountButtonsActive(true);
+    }//GEN-LAST:event_accountTableMouseClicked
 
     private Customer getSelectedCustomer(int selectedRow) {
         Customer customer = null;
@@ -203,7 +247,8 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void addCustomerToTable(Customer customer) {
         DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
-        model.addRow(new Object[]{customer.getFirstName(), customer.getLastName(), customer.getAccount().getAccountNumber(), customer.getAccount().getBalance()});
+        model.addRow(new Object[]{});
+        reloadCustomerRowData(model.getRowCount() - 1, customer);
     }
 
     private void removeCustomerFromTable(int row) {
@@ -211,10 +256,24 @@ public class MainMenu extends javax.swing.JFrame {
         model.removeRow(row);
     }
 
+    private void reloadCustomerRowData(int selectedRow, Customer customer) {
+        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
+        model.setValueAt(customer.getFirstName(), selectedRow, 0);
+        model.setValueAt(customer.getLastName(), selectedRow, 1);
+        model.setValueAt(customer.getAccount().getAccountNumber(), selectedRow, 2);
+        model.setValueAt(String.format("%.2f", customer.getAccount().getBalance()), selectedRow, 3);
+    }
+
     private void reloadTable() {
 
     }
 
+    private void setAccountButtonsActive(boolean active){
+        depositButton.setEnabled(active);
+        withdrawButton.setEnabled(active);
+        removeAccountButton.setEnabled(active);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -263,4 +322,5 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton removeAccountButton;
     private javax.swing.JButton withdrawButton;
     // End of variables declaration//GEN-END:variables
+
 }
