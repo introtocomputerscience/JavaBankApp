@@ -9,6 +9,8 @@ public abstract class Account {
     Account(){
         accountNumber = numberOfAccounts++;
     }
+    
+    public abstract String getAccountType();
     /**
      * @return the balance
      */

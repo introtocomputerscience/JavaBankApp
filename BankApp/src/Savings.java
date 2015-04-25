@@ -15,4 +15,9 @@ public class Savings extends Account{
                 "Balance: " + this.getBalance() + "\n" + 
                 "Interest Rate: " + (this.getInterest() * 100) + "%\n";
     }
+
+    @Override
+    public String getAccountType() {
+        return accountType;
+    }
 }

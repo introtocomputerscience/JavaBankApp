@@ -234,6 +234,15 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void accountTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountTableMouseClicked
         setAccountButtonsActive(true);
+
+        if (evt.getClickCount() == 2) {
+            int selectedRow = accountTable.getSelectedRow();
+            Customer customer = getSelectedCustomer(selectedRow);
+            if (customer != null) {
+                AccountDetailsPage page = new AccountDetailsPage(this, true, customer);
+                page.setVisible(true);
+            }
+        }
     }//GEN-LAST:event_accountTableMouseClicked
 
     private Customer getSelectedCustomer(int selectedRow) {
@@ -268,12 +277,12 @@ public class MainMenu extends javax.swing.JFrame {
 
     }
 
-    private void setAccountButtonsActive(boolean active){
+    private void setAccountButtonsActive(boolean active) {
         depositButton.setEnabled(active);
         withdrawButton.setEnabled(active);
         removeAccountButton.setEnabled(active);
     }
-    
+
     /**
      * @param args the command line arguments
      */

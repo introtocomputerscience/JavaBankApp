@@ -26,7 +26,7 @@ public class Customer {
         return "\nCustomer Information\n" +
                 "First Name: " + getFirstName() + "\n" + 
                 "Last Name: " + getLastName() +  "\n" + 
-                "SSN: " + ssn +  "\n" + 
+                "SSN: " + getSsn() +  "\n" + 
                 account;
     }
     
@@ -50,6 +50,13 @@ public class Customer {
      */
     public String getLastName() {
         return lastName;
+    }
+
+    /**
+     * @return the ssn
+     */
+    public String getSsn() {
+        return ssn;
     }
     
 }
