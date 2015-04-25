@@ -1,3 +1,5 @@
+package bankapp;
+
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -153,7 +155,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
-        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete.png"))); // NOI18N
+        exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankapp/delete.png"))); // NOI18N
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

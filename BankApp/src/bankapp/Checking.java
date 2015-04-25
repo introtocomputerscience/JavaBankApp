@@ -1,8 +1,10 @@
+package bankapp;
 
-public class Savings extends Account{
-    private static String accountType = "Savings";
+
+public class Checking extends Account{
+    private static String accountType = "Checking";
     
-    Savings(double initialDeposit){
+    Checking(double initialDeposit){
         this.setBalance(initialDeposit);
         this.checkInterest(0);
         this.setTransactionFee(5);
