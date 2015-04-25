@@ -24,18 +24,32 @@ public class Customer {
     @Override
     public String toString(){
         return "\nCustomer Information\n" +
-                "First Name: " + firstName + "\n" + 
-                "Last Name: " + lastName +  "\n" + 
+                "First Name: " + getFirstName() + "\n" + 
+                "Last Name: " + getLastName() +  "\n" + 
                 "SSN: " + ssn +  "\n" + 
                 account;
     }
     
     public String basicInfo(){
-        return " Account Number: " + account.getAccountNumber() + " - Name: " + firstName + " " + lastName;
+        return " Account Number: " + account.getAccountNumber() + " - Name: " + getFirstName() + " " + getLastName();
     }
     
     Account getAccount(){
         return account;
+    }
+
+    /**
+     * @return the firstName
+     */
+    public String getFirstName() {
+        return firstName;
+    }
+
+    /**
+     * @return the lastName
+     */
+    public String getLastName() {
+        return lastName;
     }
     
 }

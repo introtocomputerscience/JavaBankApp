@@ -16,5 +16,20 @@ public class Bank {
     ArrayList<Customer> getCustomers(){
         return customers;
     }
+
+    Customer getCustomerByAccountNumber(int accountNumber) {
+        Customer customer = null;
+        for(Customer c : customers){
+            if(c.getAccount().getAccountNumber() == accountNumber){
+                customer = c;
+                break;
+            }
+        }
+        return customer;
+    }
+
+    void removeCustomer(Customer customer) {
+        customers.remove(customer);
+    }
     
 }

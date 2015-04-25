@@ -1,15 +1,20 @@
+
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Carl
  */
 public class MainMenu extends javax.swing.JFrame {
+
     private Bank bank;
+
     /**
      * Creates new form MainMenu
      */
@@ -51,11 +56,17 @@ public class MainMenu extends javax.swing.JFrame {
         });
 
         removeAccountButton.setText("Remove Account");
+        removeAccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removeAccountButtonActionPerformed(evt);
+            }
+        });
 
         depositButton.setText("Deposit");
 
         withdrawButton.setText("Withdrawal");
 
+        accountTable.setAutoCreateRowSorter(true);
         accountTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -79,6 +90,8 @@ public class MainMenu extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        accountTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        accountTable.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(accountTable);
         if (accountTable.getColumnModel().getColumnCount() > 0) {
             accountTable.getColumnModel().getColumn(0).setResizable(false);
@@ -165,8 +178,42 @@ public class MainMenu extends javax.swing.JFrame {
     private void addAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAccountButtonActionPerformed
         AddAccountMenu menu = new AddAccountMenu(this, true, bank);
         menu.setVisible(true);
-        System.out.println("");
+        if (menu.getCustomer() != null) {
+            addCustomerToTable(menu.getCustomer());
+        }
     }//GEN-LAST:event_addAccountButtonActionPerformed
+
+    private void removeAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAccountButtonActionPerformed
+        int selectedRow = accountTable.getSelectedRow();
+        if (selectedRow >= 0) {
+            Customer customer = getSelectedCustomer(selectedRow);
+            bank.removeCustomer(customer);
+            removeCustomerFromTable(selectedRow);
+        }
+    }//GEN-LAST:event_removeAccountButtonActionPerformed
+
+    private Customer getSelectedCustomer(int selectedRow) {
+        Customer customer = null;
+        if (selectedRow >= 0) {
+            int accountNumber = (int) accountTable.getValueAt(selectedRow, 2);
+            customer = bank.getCustomerByAccountNumber(accountNumber);
+        }
+        return customer;
+    }
+
+    private void addCustomerToTable(Customer customer) {
+        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
+        model.addRow(new Object[]{customer.getFirstName(), customer.getLastName(), customer.getAccount().getAccountNumber(), customer.getAccount().getBalance()});
+    }
+
+    private void removeCustomerFromTable(int row) {
+        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
+        model.removeRow(row);
+    }
+
+    private void reloadTable() {
+
+    }
 
     /**
      * @param args the command line arguments
