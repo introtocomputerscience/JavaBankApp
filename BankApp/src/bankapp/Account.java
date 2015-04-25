@@ -1,7 +1,9 @@
 package bankapp;
 
+import java.io.Serializable;
 
-public abstract class Account {
+
+public abstract class Account  implements Serializable{
     private double balance = 0;
     private double interest = 0.02;
     private int accountNumber;
@@ -9,7 +11,11 @@ public abstract class Account {
     private double transactionFee;
     
     Account(){
-        accountNumber = numberOfAccounts++;
+        accountNumber = getNextAccountNumber();
+    }
+    
+    public static int getNextAccountNumber(){
+        return ++numberOfAccounts;
     }
     
     public abstract String getAccountType();
@@ -79,6 +85,10 @@ public abstract class Account {
     
     public void setTransactionFee(double fee){
         this.transactionFee = fee;
+    }
+
+    void setAccountNumber(int accountNumber) {
+        this.accountNumber = accountNumber;
     }
 
 }

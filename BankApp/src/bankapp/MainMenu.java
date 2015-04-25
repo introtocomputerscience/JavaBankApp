@@ -1,6 +1,15 @@
 package bankapp;
 
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 public class MainMenu extends javax.swing.JFrame {
 
     private Bank bank;
+    private String saveLocation = null;
 
     /**
      * Creates new form MainMenu
@@ -44,8 +54,10 @@ public class MainMenu extends javax.swing.JFrame {
         accountTable = new javax.swing.JTable();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        saveMenuItem = new javax.swing.JMenuItem();
+        saveAsMenuItem = new javax.swing.JMenuItem();
+        openMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
-        editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Bank Application");
@@ -155,6 +167,34 @@ public class MainMenu extends javax.swing.JFrame {
 
         fileMenu.setText("File");
 
+        saveMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        saveMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankapp/save.png"))); // NOI18N
+        saveMenuItem.setText("Save");
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(saveMenuItem);
+
+        saveAsMenuItem.setText("Save As...");
+        saveAsMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveAsMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(saveAsMenuItem);
+
+        openMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        openMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankapp/open.png"))); // NOI18N
+        openMenuItem.setText("Open");
+        openMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openMenuItemActionPerformed(evt);
+            }
+        });
+        fileMenu.add(openMenuItem);
+
         exitMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/bankapp/delete.png"))); // NOI18N
         exitMenuItem.setText("Exit");
         exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
@@ -165,9 +205,6 @@ public class MainMenu extends javax.swing.JFrame {
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
-
-        editMenu.setText("Edit");
-        menuBar.add(editMenu);
 
         setJMenuBar(menuBar);
 
@@ -247,6 +284,76 @@ public class MainMenu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_accountTableMouseClicked
 
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        if (saveLocation != null) {
+            saveFile(saveLocation);
+        } else {
+            saveAsMenuItemActionPerformed(evt);
+        }
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new BofFilter());
+        chooser.setAcceptAllFileFilterUsed(false);
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            if (!chooser.getSelectedFile().toString().toLowerCase().endsWith(".bof")) {
+                JOptionPane.showMessageDialog(this, "Unsupported file type selected.", "Unsupported File", JOptionPane.ERROR_MESSAGE);
+            } else {
+                try {
+                    FileInputStream fIn = new FileInputStream(chooser.getSelectedFile());
+                    ObjectInputStream objIn = new ObjectInputStream(fIn);
+                    Object bankData = objIn.readObject();
+                    if (bankData instanceof Bank) {
+                        bank = (Bank) bankData;
+                        reloadTable();
+                    }
+                    saveLocation = chooser.getSelectedFile().toString();
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
+                    Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }//GEN-LAST:event_openMenuItemActionPerformed
+
+    private void saveAsMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveAsMenuItemActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new BofFilter());
+        chooser.setAcceptAllFileFilterUsed(false);
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            String fileName = file.toString();
+            if (!fileName.toLowerCase().endsWith(".bof")) {
+                fileName += ".bof";
+            }
+            boolean saved = saveFile(fileName);
+            if (saved) {
+                saveLocation = fileName;
+            }
+        }
+    }//GEN-LAST:event_saveAsMenuItemActionPerformed
+
+    private boolean saveFile(String fileName) {
+        try {
+            FileOutputStream fOut = new FileOutputStream(fileName);
+            ObjectOutputStream objOut = new ObjectOutputStream(fOut);
+            objOut.writeObject(bank);
+            objOut.close();
+            fOut.close();
+            return true;
+        } catch (FileNotFoundException ex) {
+            return false;
+        } catch (IOException ex) {
+            return false;
+        }
+    }
+
     private Customer getSelectedCustomer(int selectedRow) {
         Customer customer = null;
         if (selectedRow >= 0) {
@@ -276,7 +383,9 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void reloadTable() {
-
+        for (Customer c : bank.getCustomers()) {
+            addCustomerToTable(c);
+        }
     }
 
     private void setAccountButtonsActive(boolean active) {
@@ -325,12 +434,14 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton addAccountButton;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JButton depositButton;
-    private javax.swing.JMenu editMenu;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JButton removeAccountButton;
+    private javax.swing.JMenuItem saveAsMenuItem;
+    private javax.swing.JMenuItem saveMenuItem;
     private javax.swing.JButton withdrawButton;
     // End of variables declaration//GEN-END:variables
 

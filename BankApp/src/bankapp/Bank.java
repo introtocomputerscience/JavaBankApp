@@ -1,16 +1,37 @@
 package bankapp;
 
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 
 
-public class Bank {
-    ArrayList<Customer> customers = new ArrayList<Customer>();
+public class Bank implements Serializable{
+    private ArrayList<Customer> customers = new ArrayList<Customer>();
     
     void addCustomer(Customer customer) {
+        if(accountExists(customer.getAccount().getAccountNumber())){
+            customer.getAccount().setAccountNumber(findValidAccountNumber());
+        }
         customers.add(customer);
+    }
+    
+    private int findValidAccountNumber(){
+        int accountNumber = 0;
+        do {
+            accountNumber = Account.getNextAccountNumber();
+        } while(accountExists(accountNumber));      
+        return accountNumber;
+    }
+    
+    private boolean accountExists(int accountNumber){
+        for(Customer c : customers){
+            if(c.getAccount().getAccountNumber() == accountNumber){
+                return true;
+            }
+        }
+        return false;
     }
 
     Customer getCustomer(int account) {
