@@ -9,12 +9,14 @@
  * @author Carl
  */
 public class MainMenu extends javax.swing.JFrame {
-
+    private Bank bank;
     /**
      * Creates new form MainMenu
      */
     public MainMenu() {
         initComponents();
+        setLocationRelativeTo(null);
+        bank = new Bank();
     }
 
     /**
@@ -39,8 +41,14 @@ public class MainMenu extends javax.swing.JFrame {
         editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Bank Application");
 
         addAccountButton.setText("Add Account");
+        addAccountButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAccountButtonActionPerformed(evt);
+            }
+        });
 
         removeAccountButton.setText("Remove Account");
 
@@ -153,6 +161,12 @@ public class MainMenu extends javax.swing.JFrame {
     private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
         this.dispose();
     }//GEN-LAST:event_exitMenuItemActionPerformed
+
+    private void addAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAccountButtonActionPerformed
+        AddAccountMenu menu = new AddAccountMenu(this, true, bank);
+        menu.setVisible(true);
+        System.out.println("");
+    }//GEN-LAST:event_addAccountButtonActionPerformed
 
     /**
      * @param args the command line arguments
