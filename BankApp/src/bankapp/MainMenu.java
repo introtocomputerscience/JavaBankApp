@@ -252,24 +252,30 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_removeAccountButtonActionPerformed
 
     private void depositButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_depositButtonActionPerformed
-        int selectedRow = accountTable.getSelectedRow();
-        Customer customer = getSelectedCustomer(selectedRow);
-        if (customer != null) {
-            DepositMenu menu = new DepositMenu(this, true, customer);
-            menu.setVisible(true);
-            reloadCustomerRowData(selectedRow, customer);
-        }
+        depositOrWithdraw("deposit");
     }//GEN-LAST:event_depositButtonActionPerformed
 
     private void withdrawButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_withdrawButtonActionPerformed
-        int selectedRow = accountTable.getSelectedRow();
+        depositOrWithdraw("withdraw");
+    }//GEN-LAST:event_withdrawButtonActionPerformed
+    
+    private void depositOrWithdraw(String action) {
+        int selectedRow = table.getSelectedRow();
         Customer customer = getSelectedCustomer(selectedRow);
         if (customer != null) {
-            WithdrawalMenu menu = new WithdrawalMenu(this, true, customer);
-            menu.setVisible(true);
+            javax.swing.JDialog window = null;
+            if (action.equals("deposit")) {
+                window = new DepositWindow(this, true, customer);
+            }
+            else if (action.equals("withdraw")) {
+                window = new WithdrawWindow(this, true, customer);
+            }
+            if (window != null) {
+                window.setVisible(true);
+            }
             reloadCustomerRowData(selectedRow, customer);
         }
-    }//GEN-LAST:event_withdrawButtonActionPerformed
+    }
 
     private void accountTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_accountTableMouseClicked
         setAccountButtonsActive(true);
