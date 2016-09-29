@@ -383,6 +383,12 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void reloadTable() {
+        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
+        // Deletes the rows from the highest index downwards, since deleting 
+        // from index 0 would shift all remaining rows to a lower index
+        for (int i = model.getRowCount() - 1; i >= 0; i--) {
+            model.removeRow(i); 
+        }
         for (Customer c : bank.getCustomers()) {
             addCustomerToTable(c);
         }
