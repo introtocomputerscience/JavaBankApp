@@ -241,12 +241,15 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_addAccountButtonActionPerformed
 
     private void removeAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeAccountButtonActionPerformed
-        int selectedRow = accountTable.getSelectedRow();
-        if (selectedRow >= 0) {
-            Customer customer = getSelectedCustomer(selectedRow);
-            if (customer != null) {
-                bank.removeCustomer(customer);
-                removeCustomerFromTable(selectedRow);
+        int result = JOptionPane.showConfirmDialog(this, "Are you sure?", "Select an Option" , JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            int selectedRow = accountTable.getSelectedRow();
+            if (selectedRow >= 0) {
+                Customer customer = getSelectedCustomer(selectedRow);
+                if (customer != null) {
+                    bank.removeCustomer(customer);
+                    removeCustomerFromTable(selectedRow);
+                }
             }
         }
     }//GEN-LAST:event_removeAccountButtonActionPerformed
