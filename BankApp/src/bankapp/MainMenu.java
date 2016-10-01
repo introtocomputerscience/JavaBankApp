@@ -26,6 +26,7 @@ public class MainMenu extends javax.swing.JFrame {
 
     private Bank bank;
     private String saveLocation = null;
+    private final DefaultTableModel model;
 
     /**
      * Creates new form MainMenu
@@ -34,6 +35,7 @@ public class MainMenu extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         bank = new Bank();
+        model = (DefaultTableModel) table.getModel();
     }
 
     /**
@@ -373,18 +375,15 @@ public class MainMenu extends javax.swing.JFrame {
     }
 
     private void addCustomerToTable(Customer customer) {
-        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
         model.addRow(new Object[]{});
         reloadCustomerRowData(model.getRowCount() - 1, customer);
     }
 
     private void removeCustomerFromTable(int row) {
-        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
         model.removeRow(row);
     }
 
     private void reloadCustomerRowData(int selectedRow, Customer customer) {
-        DefaultTableModel model = (DefaultTableModel) accountTable.getModel();
         model.setValueAt(customer.getFirstName(), selectedRow, 0);
         model.setValueAt(customer.getLastName(), selectedRow, 1);
         model.setValueAt(customer.getAccount().getAccountNumber(), selectedRow, 2);
