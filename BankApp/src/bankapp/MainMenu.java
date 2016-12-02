@@ -35,7 +35,7 @@ public class MainMenu extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         bank = new Bank();
-        model = (DefaultTableModel) table.getModel();
+        model = (DefaultTableModel) accountTable.getModel();
     }
 
     /**
@@ -265,15 +265,15 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_withdrawButtonActionPerformed
     
     private void depositOrWithdraw(String action) {
-        int selectedRow = table.getSelectedRow();
+        int selectedRow = accountTable.getSelectedRow();
         Customer customer = getSelectedCustomer(selectedRow);
         if (customer != null) {
             javax.swing.JDialog window = null;
             if (action.equals("deposit")) {
-                window = new DepositWindow(this, true, customer);
+                window = new DepositMenu(this, true, customer);
             }
             else if (action.equals("withdraw")) {
-                window = new WithdrawWindow(this, true, customer);
+                window = new WithdrawalMenu(this, true, customer);
             }
             if (window != null) {
                 window.setVisible(true);
@@ -321,11 +321,7 @@ public class MainMenu extends javax.swing.JFrame {
                         reloadTable();
                     }
                     saveLocation = chooser.getSelectedFile().toString();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
@@ -424,13 +420,7 @@ public class MainMenu extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (Exception ex) {
             java.util.logging.Logger.getLogger(MainMenu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>

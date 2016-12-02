@@ -18,7 +18,7 @@ public class Bank implements Serializable{
     }
     
     private int findValidAccountNumber(){
-        int accountNumber = 0;
+        int accountNumber;
         do {
             accountNumber = Account.getNextAccountNumber();
         } while(accountExists(accountNumber));      
@@ -62,7 +62,7 @@ public class Bank implements Serializable{
             throw new IllegalArgumentException();
         }
         BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.FLOOR);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
     
