@@ -117,7 +117,7 @@ public class AddAccountMenu extends javax.swing.JDialog {
         } else {
             lastName = lastNameField.getText();
         }
-        if (!ssnField.getText().matches("(\\d{3}-?){2}\\d{4}")) {
+        if (!ssnField.getText().matches("\\d{3}-?\\d{2}-?\\d{4}")) {
             warnings.append("SSN must be 9 digits, dashes are acceptable.\n");
         } else {
             ssn = ssnField.getText().replace("-", "");
@@ -135,23 +135,22 @@ public class AddAccountMenu extends javax.swing.JDialog {
         if (warnings.length() > 0) {
             JOptionPane.showMessageDialog(this, warnings.toString(), "Input Warnings", JOptionPane.WARNING_MESSAGE);
         } else {
-            Account account = null;
+            AccountType accountType = AccountType.Undefined;
             if (typeField.getSelectedItem().toString() == "Checking") {
                 if (amount >= 100) {
-                    account = new Checking(amount);
+                    accountType = AccountType.Checking;
                 } else {
                     warnings.append("Initial deposit must be at least $100 for Checking accounts.");
                 }
             } else if (typeField.getSelectedItem().toString() == "Savings") {
                 if (amount >= 50) {
-                    account = new Savings(amount);
+                    accountType = AccountType.Savings;
                 } else {
                     warnings.append("Initial deposit must be at least $50 for Savings accounts.");
                 }
             }
-            if (account != null) {
-                customer = new Customer(firstName, lastName, ssn, account);
-                bank.addCustomer(customer);
+            if (accountType != AccountType.Undefined) {
+                customer = bank.openAccount(firstName, lastName, ssn, accountType, amount);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, warnings.toString(), "Input Warnings", JOptionPane.WARNING_MESSAGE);

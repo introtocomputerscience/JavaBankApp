@@ -15,7 +15,7 @@ public class AccountDetailsPage extends javax.swing.JDialog {
     /**
      * Creates new form AccountDetailsPage
      */
-    public AccountDetailsPage(java.awt.Frame parent, boolean modal, Customer customer) {
+    public AccountDetailsPage(java.awt.Frame parent, boolean modal, Bank bank, Customer customer) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
@@ -25,11 +25,11 @@ public class AccountDetailsPage extends javax.swing.JDialog {
         firstNameField.setText(customer.getFirstName());
         lastNameField.setText(customer.getLastName());
         ssnField.setText(customer.getSsn());
-        typeField.setText(customer.getAccount().getAccountType());
+        typeField.setText(customer.getAccount().getAccountType().name());
         accountNumberField.setText(String.valueOf(customer.getAccount().getAccountNumber()));
         balanceField.setText(String.format("$%.2f", customer.getAccount().getBalance()));
-        interestField.setText(String.valueOf(customer.getAccount().getInterest() * 100) + "%");
-        feeField.setText(String.format("$%.2f", customer.getAccount().getTransactionFee()));
+        interestField.setText(String.valueOf(bank.checkInterest(customer.getAccount().getBalance(), 0) * 100) + "%");
+        feeField.setText(String.format("$%.2f", bank.getTransactionFee(customer.getAccount().getAccountType())));
     }
 
     /**
